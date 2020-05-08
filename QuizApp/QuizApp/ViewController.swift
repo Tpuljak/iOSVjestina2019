@@ -30,13 +30,13 @@ struct Response: Codable {
 }
 
 extension UIImage {
-
+    
     func resize(maxWidthHeight : Double)-> UIImage? {
         let actualHeight = Double(size.height)
         let actualWidth = Double(size.width)
         var maxWidth = 0.0
         var maxHeight = 0.0
-
+        
         if actualWidth > actualHeight {
             maxWidth = maxWidthHeight
             let per = (100.0 * maxWidthHeight / actualWidth)
@@ -46,17 +46,17 @@ extension UIImage {
             let per = (100.0 * maxWidthHeight / actualHeight)
             maxWidth = (actualWidth * per) / 100.0
         }
-
+        
         let hasAlpha = true
         let scale: CGFloat = 0.0
-
+        
         UIGraphicsBeginImageContextWithOptions(CGSize(width: maxWidth, height: maxHeight), !hasAlpha, scale)
         self.draw(in: CGRect(origin: .zero, size: CGSize(width: maxWidth, height: maxHeight)))
-
+        
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         return scaledImage
     }
-
+    
 }
 
 extension UIImageView {
@@ -70,6 +70,24 @@ extension UIImageView {
                 }
             }
         }
+    }
+}
+
+extension UIColor {
+    convenience init(red: Int, green: Int, blue: Int) {
+        assert(red >= 0 && red <= 255, "Invalid red component")
+        assert(green >= 0 && green <= 255, "Invalid green component")
+        assert(blue >= 0 && blue <= 255, "Invalid blue component")
+        
+        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
+    }
+    
+    convenience init(rgb: Int) {
+        self.init(
+            red: (rgb >> 16) & 0xFF,
+            green: (rgb >> 8) & 0xFF,
+            blue: rgb & 0xFF
+        )
     }
 }
 
@@ -93,12 +111,13 @@ class ViewController: UIViewController {
                 if let data = data {
                     do {
                         let res = try JSONDecoder().decode(Response.self, from: data)
-
+                        
                         let randomQuiz = res.quizzes[Int.random(in: 0..<res.quizzes.count)]
                         
                         DispatchQueue.main.async {
                             self.dataFailedLabel.isHidden = true
                             self.funFactCountLabel.text = String(self.getFunFactCount(quizzes: res.quizzes))
+                            self.questionView.subviews.forEach({ $0.removeFromSuperview() })
                             
                             if (randomQuiz.image.absoluteString == "") {
                                 self.singleQuizImageView.isHidden = true
@@ -124,19 +143,33 @@ class ViewController: UIViewController {
                             self.questionView.addSubview(questionLabel)
                             
                             questionLabel.translatesAutoresizingMaskIntoConstraints = false
-                            questionLabel.leadingAnchor.constraint(equalTo: self.questionView.leadingAnchor).isActive = true
-                            questionLabel.trailingAnchor.constraint(equalTo: self.questionView.trailingAnchor).isActive = true
-
-                            randomQuestion.answers.forEach{ answer in
+                            questionLabel.centerXAnchor.constraint(equalTo: self.questionView.centerXAnchor).isActive = true
+                            questionLabel.widthAnchor.constraint(equalTo: self.questionView.widthAnchor).isActive = true
+                            questionLabel.topAnchor.constraint(equalTo: self.questionView.topAnchor).isActive = true
+                            
+                            var previous: UIButton?
+                            for (index, answer) in randomQuestion.answers.enumerated() {
                                 let answerButton = UIButton()
                                 answerButton.setTitle(answer, for: .normal)
+                                answerButton.setTitleColor(UIColor.init(rgb: 0x007AFF), for: .normal)
+                                answerButton.tag = index == randomQuestion.correct_answer ? 1 : 0
+                                answerButton.addTarget(self, action: #selector(self.answerButtonAction), for: UIControl.Event.touchUpInside)
                                 self.questionView.addSubview(answerButton)
                                 
                                 answerButton.translatesAutoresizingMaskIntoConstraints = false
-                                answerButton.leadingAnchor.constraint(equalTo: self.questionView.leadingAnchor).isActive = true
+                                answerButton.centerXAnchor.constraint(equalTo: self.questionView.centerXAnchor).isActive = true
+                                answerButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
+                                answerButton.widthAnchor.constraint(equalTo: self.questionView.widthAnchor).isActive = true
+                                
+                                if let previous = previous {
+                                    answerButton.topAnchor.constraint(equalTo: previous.bottomAnchor, constant: 10).isActive = true
+                                } else {
+                                    answerButton.topAnchor.constraint(equalTo: questionLabel.bottomAnchor, constant: 10).isActive = true
+                                }
+
+                                previous = answerButton
                             }
                         }
-//                        print(res)
                     } catch let error {
                         self.mainStackView.isHidden = true
                         self.dataFailedLabel.isHidden = false
@@ -155,6 +188,14 @@ class ViewController: UIViewController {
         }
         
         return funFactCount
+    }
+    
+    @objc func answerButtonAction(sender: UIButton) {
+        if (sender.tag == 1) {
+            sender.backgroundColor = UIColor.green
+        } else {
+            sender.backgroundColor = UIColor.red
+        }
     }
 }
 
