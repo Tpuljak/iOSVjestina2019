@@ -13,6 +13,9 @@
 		F1CE7E6324641ECD002258DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1CE7E6124641ECD002258DE /* Main.storyboard */; };
 		F1CE7E6524641ED0002258DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1CE7E6424641ED0002258DE /* Assets.xcassets */; };
 		F1CE7E6824641ED0002258DE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1CE7E6624641ED0002258DE /* LaunchScreen.storyboard */; };
+		F1D755812466B529003D7845 /* Extenstions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D755802466B529003D7845 /* Extenstions.swift */; };
+		F1D755832466B5BA003D7845 /* ApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D755822466B5BA003D7845 /* ApiClient.swift */; };
+		F1D755852466B5DB003D7845 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D755842466B5DB003D7845 /* Types.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		F1CE7E6424641ED0002258DE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F1CE7E6724641ED0002258DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F1CE7E6924641ED0002258DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F1D755802466B529003D7845 /* Extenstions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extenstions.swift; sourceTree = "<group>"; };
+		F1D755822466B5BA003D7845 /* ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
+		F1D755842466B5DB003D7845 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +62,7 @@
 		F1CE7E5A24641ECD002258DE /* QuizApp */ = {
 			isa = PBXGroup;
 			children = (
+				F1D7557F2466B511003D7845 /* Service */,
 				F1CE7E5B24641ECD002258DE /* AppDelegate.swift */,
 				F1CE7E5D24641ECD002258DE /* SceneDelegate.swift */,
 				F1CE7E5F24641ECD002258DE /* ViewController.swift */,
@@ -65,6 +72,16 @@
 				F1CE7E6924641ED0002258DE /* Info.plist */,
 			);
 			path = QuizApp;
+			sourceTree = "<group>";
+		};
+		F1D7557F2466B511003D7845 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				F1D755802466B529003D7845 /* Extenstions.swift */,
+				F1D755822466B5BA003D7845 /* ApiClient.swift */,
+				F1D755842466B5DB003D7845 /* Types.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,9 +155,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1D755812466B529003D7845 /* Extenstions.swift in Sources */,
 				F1CE7E6024641ECD002258DE /* ViewController.swift in Sources */,
 				F1CE7E5C24641ECD002258DE /* AppDelegate.swift in Sources */,
+				F1D755852466B5DB003D7845 /* Types.swift in Sources */,
 				F1CE7E5E24641ECD002258DE /* SceneDelegate.swift in Sources */,
+				F1D755832466B5BA003D7845 /* ApiClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
