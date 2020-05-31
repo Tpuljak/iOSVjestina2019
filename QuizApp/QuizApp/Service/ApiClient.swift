@@ -56,7 +56,9 @@ class ApiClient {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = jsonData
-        print(request)
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
         var result: Result<UserIdTokenResponse?, NetworkError>!
         
         let semaphore = DispatchSemaphore(value: 0)
