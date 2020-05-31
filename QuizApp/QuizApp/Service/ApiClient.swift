@@ -16,7 +16,7 @@ class ApiClient {
     }
     
     public func getQuizData() -> Result<GetQuizzesResponse?, NetworkError> {
-        guard let  url = URL(string: self.baseUrl + "/quizzes") else {
+        guard let url = URL(string: self.baseUrl + "/quizzes") else {
             return .failure(.url)
         }
         
@@ -28,6 +28,43 @@ class ApiClient {
             if let data = data {
                 do {
                     let res = try JSONDecoder().decode(GetQuizzesResponse.self, from: data)
+                    
+                    result = .success(res)
+                } catch _ {
+                    result = .failure(.server)
+                }
+            } else {
+                result = .failure(.server)
+            }
+            semaphore.signal()
+        }.resume()
+        
+        _ = semaphore.wait(wallTimeout: .distantFuture)
+        
+        return result
+    }
+    
+    public func authorize(username: String, password: String) -> Result<UserIdTokenResponse?, NetworkError> {
+        guard let url = URL(string: self.baseUrl + "/session") else {
+            return .failure(.url)
+        }
+        
+        let json: [String: Any] = ["username": username, "password": password]
+
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        print(request)
+        var result: Result<UserIdTokenResponse?, NetworkError>!
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.dataTask(with: request) { data, _, _ in
+            if let data = data {
+                do {
+                    let res = try JSONDecoder().decode(UserIdTokenResponse.self, from: data)
                     
                     result = .success(res)
                 } catch _ {

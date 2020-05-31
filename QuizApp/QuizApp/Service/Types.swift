@@ -12,6 +12,11 @@ enum NetworkError: Error {
     case url, server
 }
 
+struct UserIdTokenResponse: Codable {
+    let user_id: Int
+    let token: String
+}
+
 enum Category: String, CaseIterableDefaultsLast, Codable {
     case sports = "SPORTS", science = "SCIENCE", unkown
 }
