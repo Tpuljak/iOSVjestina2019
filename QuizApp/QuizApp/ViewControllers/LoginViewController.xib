@@ -9,7 +9,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController" customModule="QuizApp" customModuleProvider="target">
             <connections>
+                <outlet property="bottomLayoutConstraint" destination="6vO-is-6OM" id="rsv-CT-oFB"/>
                 <outlet property="credentialsIncorrectLabel" destination="qQB-JS-Bi4" id="U7G-in-Ikq"/>
+                <outlet property="loginButton" destination="pTM-7d-KEJ" id="fsF-sk-zS6"/>
                 <outlet property="passwordInput" destination="pZI-Yh-xIr" id="KMf-py-Hil"/>
                 <outlet property="usernameInput" destination="DV3-pK-FFg" id="kdw-pN-HBb"/>
                 <outlet property="view" destination="iN0-l3-epB" id="L18-8z-x1u"/>
@@ -20,9 +22,8 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rBc-Q7-tmM">
-                    <rect key="frame" x="46.484879056712771" y="295.73489064668752" width="318.00000000000011" height="304.99999999999994"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rBc-Q7-tmM">
+                    <rect key="frame" x="46.5" y="296" width="318" height="306"/>
                     <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DV3-pK-FFg">
                             <rect key="frame" x="118" y="136" width="181" height="34"/>
@@ -48,7 +49,7 @@
                             <rect key="frame" x="118" y="192" width="181" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits" textContentType="password"/>
+                            <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
                         </textField>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Login" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="783-UG-Rus">
                             <rect key="frame" x="121.466823950209" y="18.000000000000227" width="72.000000000000028" height="35.999999999999957"/>
@@ -74,9 +75,17 @@
                         </button>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="306" id="SSG-bq-fwr"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="rBc-Q7-tmM" secondAttribute="bottom" constant="260" id="6vO-is-6OM"/>
+                <constraint firstItem="rBc-Q7-tmM" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="46.5" id="Hab-ws-6vZ"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="rBc-Q7-tmM" secondAttribute="trailing" constant="49.5" id="hWu-em-4Ab"/>
+            </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <point key="canvasLocation" x="131.8840579710145" y="101.78571428571428"/>
         </view>

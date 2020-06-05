@@ -33,6 +33,15 @@ extension UIImageView {
     }
 }
 
+extension Array
+{
+   func filterDuplicate<T>(_ keyValue:(Element)->T) -> [Element]
+   {
+      var uniqueKeys = Set<String>()
+      return filter{uniqueKeys.insert("\(keyValue($0))").inserted}
+   }
+}
+
 extension UIColor {
     convenience init(red: Int, green: Int, blue: Int) {
         assert(red >= 0 && red <= 255, "Invalid red component")

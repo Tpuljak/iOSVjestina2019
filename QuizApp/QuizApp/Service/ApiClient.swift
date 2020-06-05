@@ -68,6 +68,8 @@ class ApiClient {
                 do {
                     let res = try JSONDecoder().decode(UserIdTokenResponse.self, from: data)
                     
+                    UserDefaults.standard.set(res.token, forKey: "token")
+                    UserDefaults.standard.set(res.user_id, forKey: "userId")
                     result = .success(res)
                 } catch _ {
                     result = .failure(.server)
@@ -75,6 +77,38 @@ class ApiClient {
             } else {
                 result = .failure(.server)
             }
+            semaphore.signal()
+        }.resume()
+        
+        _ = semaphore.wait(wallTimeout: .distantFuture)
+        
+        return result
+    }
+    
+    public func sendQuizResults(quizId: Int, time: TimeInterval, nOfCorrect: Int) -> HTTPURLResponse {
+        let url = URL(string: self.baseUrl + "/result")!
+        
+        let userId = UserDefaults.standard.integer(forKey: "userId")
+        let json: [String: Any] = ["quiz_id": quizId, "user_id": userId, "time": time, "n_of_correct": nOfCorrect]
+
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let token = UserDefaults.standard.string(forKey: "token")
+        request.setValue(token, forHTTPHeaderField: "Authorization")
+        
+        var result: HTTPURLResponse!
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.dataTask(with: request) { data, response, _ in
+            result = response as? HTTPURLResponse
+            
             semaphore.signal()
         }.resume()
         

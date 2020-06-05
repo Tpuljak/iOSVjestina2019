@@ -21,8 +21,16 @@ class QuizTableHeader: UIView {
         titleLabel.font = UIFont.systemFont(ofSize: 20)
         titleLabel.textColor = UIColor.darkGray
         self.addSubview(titleLabel)
-        titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+    }
+    
+    func setTitleAndColor(category: Category) {
+        DispatchQueue.main.async {
+            self.titleLabel.text = category.rawValue
+            self.backgroundColor = categoryToColor(category: category)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

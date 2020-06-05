@@ -11,19 +11,26 @@ import UIKit
 class QuizTableViewController: UIViewController {
     
     @IBOutlet weak var quizTableView: UITableView!
-    @IBOutlet weak var dataFailedLabel: UILabel!
+    @IBOutlet weak var dataFailed: UILabel!
     
     var refreshControl: UIRefreshControl!
     var quizzes: [Quiz]?
+    var quizSections: Dictionary<Category, [Quiz]>?
+    var categories: [Category]?
+    
     let cellReuseIdentifier = "cellReuseIdentifier"
     
     private var apiClient = ApiClient(baseUrl: "https://iosquiz.herokuapp.com/api")
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        if (!UserDefaults.standard.valueExists(forKey: "token")) {
+            self.navigationController?.pushViewController(LoginViewController(), animated: true)
+        }
         
         setupQuizTableView()
+        getData()
     }
     
     func setupQuizTableView() {
@@ -33,97 +40,49 @@ class QuizTableViewController: UIViewController {
         quizTableView.separatorStyle = .none
         
         refreshControl = UIRefreshControl()
-//        refreshControl.addTarget(self, action: #selector(ReviewsViewController.refresh), for: UIControl.Event.valueChanged)
+        refreshControl.addTarget(self, action: #selector(QuizTableViewController.refresh), for: UIControl.Event.valueChanged)
         quizTableView.refreshControl = refreshControl
 
-        quizTableView.register(UINib(nibName: "QuizTableViewController", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
+        quizTableView.register(UINib(nibName: "QuizTableCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
+        quizTableView.delegate = self
     }
     
     func getData() {
         DispatchQueue.global(qos: .utility).async {
             let result = self.apiClient.getQuizData()
             
-            DispatchQueue.main.async {
-                switch result {
-                case let .success(data):
-                    let quizzes = data.flatMap{ $0.quizzes }!
-                    
-//                    let randomQuiz = quizzes[Int.random(in: 0..<quizzes.count)]
-//                    self.dataFailedLabel.isHidden = true
-//                    self.funFactCountLabel.text = String(self.getFunFactCount(quizzes: quizzes))
-//                    self.questionView.subviews.forEach({ $0.removeFromSuperview() })
-//
-//                    if (randomQuiz.image.absoluteString == "") {
-//                        self.singleQuizImageView.isHidden = true
-//                    } else {
-//                        self.singleQuizImageView.load(url: randomQuiz.image)
-//                        self.singleQuizImageView.backgroundColor = categoryToColor(category: randomQuiz.category)
-//                    }
-//
-//                    self.singleQuizNameLabel.text = randomQuiz.title
-//                    self.singleQuizNameLabel.backgroundColor = categoryToColor(category: randomQuiz.category)
-//                    self.mainStackView.isHidden = false
-//
-//                    if (quizzes.filter{ $0.questions.count > 0 }.count == 0) { return }
-//                    var questions = randomQuiz.questions
-//
-//                    while(questions.count == 0) {
-//                        questions = quizzes[Int.random(in: 0..<quizzes.count)].questions
-//                    }
-//
-//                    let randomQuestion = questions[Int.random(in: 0..<questions.count)]
-//
-//                    let questionLabel = UILabel()
-//                    questionLabel.text = randomQuestion.question
-//                    questionLabel.numberOfLines = 0
-//                    self.questionView.addSubview(questionLabel)
-//
-//                    questionLabel.translatesAutoresizingMaskIntoConstraints = false
-//                    questionLabel.centerXAnchor.constraint(equalTo: self.questionView.centerXAnchor).isActive = true
-//                    questionLabel.widthAnchor.constraint(equalTo: self.questionView.widthAnchor).isActive = true
-//                    questionLabel.topAnchor.constraint(equalTo: self.questionView.topAnchor).isActive = true
-//
-//                    var previous: UIButton?
-//                    for (index, answer) in randomQuestion.answers.enumerated() {
-//                        let answerButton = UIButton()
-//                        answerButton.setTitle(answer, for: .normal)
-//                        answerButton.setTitleColor(UIColor.init(rgb: 0x007AFF), for: .normal)
-//                        answerButton.tag = index == randomQuestion.correct_answer ? 1 : 0
-//                        answerButton.addTarget(self, action: #selector(self.answerButtonAction), for: UIControl.Event.touchUpInside)
-//                        self.questionView.addSubview(answerButton)
-//
-//                        answerButton.translatesAutoresizingMaskIntoConstraints = false
-//                        answerButton.centerXAnchor.constraint(equalTo: self.questionView.centerXAnchor).isActive = true
-//                        answerButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
-//                        answerButton.widthAnchor.constraint(equalTo: self.questionView.widthAnchor).isActive = true
-//
-//                        if let previous = previous {
-//                            answerButton.topAnchor.constraint(equalTo: previous.bottomAnchor, constant: 10).isActive = true
-//                        } else {
-//                            answerButton.topAnchor.constraint(equalTo: questionLabel.bottomAnchor, constant: 10).isActive = true
-//                        }
-//
-//                        previous = answerButton
-//                    }
-                    break
-                case let .failure(error):
-                    self.dataFailedLabel.isHidden = false
-//                    self.tableView.isHidden = true
-                    print(error)
-                    break
+            switch result {
+            case let .success(data):
+                DispatchQueue.main.async {
+                    self.dataFailed.isHidden = true
                 }
+                
+                self.quizzes = data.flatMap{ $0.quizzes }!
+                self.quizSections = Dictionary(grouping: self.quizzes ?? [], by: { $0.category })
+                
+                if self.quizSections != nil {
+                    self.categories = Array(self.quizSections!.keys)
+                }
+                
+                self.refresh()
+                break
+            case let .failure(error):
+                DispatchQueue.main.async {
+                    self.quizTableView.isHidden = true
+                    self.dataFailed.isHidden = false
+                }
+                
+                print(error)
+                break
             }
         }
     }
     
-    func getFunFactCount(quizzes: Array<Quiz>) -> Int {
-        var funFactCount = 0
-        
-        quizzes.forEach{ quiz in
-            funFactCount += quiz.questions.filter { $0.question.contains("NBA") }.count
+    @objc func refresh() {
+        DispatchQueue.main.async {
+            self.quizTableView.reloadData()
+            self.refreshControl.endRefreshing()
         }
-        
-        return funFactCount
     }
     
     @objc func answerButtonAction(sender: UIButton) {
@@ -134,16 +93,24 @@ class QuizTableViewController: UIViewController {
         }
     }
     
-    func quiz(atIndex index: Int) -> Quiz? {
+    func quiz(atIndex index: Int, atSection: Int) -> Quiz? {
         guard let quizzes = quizzes else {
             return nil
         }
         
-        return quizzes[index]
+        if quizSections != nil && categories != nil {
+            return quizSections![categories![atSection]]![index]
+        }
+        
+        return nil
     }
     
-    func numberOfQuizzes() -> Int {
-        return quizzes?.count ?? 0
+    func numberOfQuizzes(section: Int) -> Int {
+        if quizSections != nil && categories != nil {
+            return quizSections![categories![section]]!.count
+        }
+        
+        return 0
     }
     
 }
@@ -155,6 +122,11 @@ extension QuizTableViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = QuizTableHeader()
+        
+        if categories != nil {
+            view.setTitleAndColor(category: categories![section])
+        }
+        
         return view
     }
     
@@ -165,8 +137,9 @@ extension QuizTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let review = quiz(atIndex: indexPath.row) {
+        if let quiz = quiz(atIndex: indexPath.row, atSection: indexPath.section) {
             let singleQuizViewController = SingleQuizViewController()
+            singleQuizViewController.quiz = quiz
             navigationController?.pushViewController(singleQuizViewController, animated: true)
         }
     }
@@ -176,17 +149,17 @@ extension QuizTableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! QuizTableCell
         
-        if let quiz = quiz(atIndex: indexPath.row) {
+        if let quiz = quiz(atIndex: indexPath.row, atSection: indexPath.section) {
             cell.setup(withQuiz: quiz)
         }
         return cell
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return quizSections?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numberOfQuizzes()
+        return numberOfQuizzes(section: section)
     }
 }

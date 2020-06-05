@@ -17,13 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.backgroundColor = UIColor.white
         
-        let viewController: UIViewController
-        
-//        if (UserDefaults.standard.valueExists(forKey: "token")) {
-            viewController = LoginViewController()
-//        } else {
-//            viewController = QuizTableViewController()
-//        }
+        let viewController: UIViewController = QuizTableViewController()
         
         let navigationController = UINavigationController(rootViewController: viewController)
         window?.rootViewController = navigationController

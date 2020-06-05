@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		716634BC08FE5AC72D7253F9 /* Pods_QuizApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81F6BFDA6B6E989340236471 /* Pods_QuizApp.framework */; };
 		F11D315324842EE300D1EC5F /* QuizTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F11D315224842EE300D1EC5F /* QuizTableCell.xib */; };
 		F11D315524842EFE00D1EC5F /* QuizTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11D315424842EFE00D1EC5F /* QuizTableCell.swift */; };
 		F11D3157248430A300D1EC5F /* QuizTableHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11D3156248430A300D1EC5F /* QuizTableHeader.swift */; };
@@ -14,8 +15,7 @@
 		F11D315B2484352400D1EC5F /* QuizTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F11D315A2484352400D1EC5F /* QuizTableViewController.xib */; };
 		F169433A2483C29100431BA1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16943392483C29100431BA1 /* LoginViewController.swift */; };
 		F169433C2483C2B100431BA1 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F169433B2483C2B100431BA1 /* LoginViewController.xib */; };
-		F169433E2483CBCF00431BA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F169433D2483CBCE00431BA1 /* Main.storyboard */; };
-		F16943402483CC2600431BA1 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F169433F2483CC2600431BA1 /* MainViewController.swift */; };
+		F16F47C0248A45170064B318 /* SingleQuizViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F16F47BF248A45170064B318 /* SingleQuizViewController.xib */; };
 		F1A587AF24829E5200582D70 /* QuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A587AE24829E5200582D70 /* QuestionView.swift */; };
 		F1CE7E5C24641ECD002258DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CE7E5B24641ECD002258DE /* AppDelegate.swift */; };
 		F1CE7E6024641ECD002258DE /* QuizTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CE7E5F24641ECD002258DE /* QuizTableViewController.swift */; };
@@ -27,6 +27,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		088CB2230BB159B51829D1D5 /* Pods-QuizApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuizApp.debug.xcconfig"; path = "Target Support Files/Pods-QuizApp/Pods-QuizApp.debug.xcconfig"; sourceTree = "<group>"; };
+		81F6BFDA6B6E989340236471 /* Pods_QuizApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuizApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE458440D58C8F92EECE1679 /* Pods-QuizApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuizApp.release.xcconfig"; path = "Target Support Files/Pods-QuizApp/Pods-QuizApp.release.xcconfig"; sourceTree = "<group>"; };
 		F11D315224842EE300D1EC5F /* QuizTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QuizTableCell.xib; sourceTree = "<group>"; };
 		F11D315424842EFE00D1EC5F /* QuizTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizTableCell.swift; sourceTree = "<group>"; };
 		F11D3156248430A300D1EC5F /* QuizTableHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizTableHeader.swift; sourceTree = "<group>"; };
@@ -34,8 +37,7 @@
 		F11D315A2484352400D1EC5F /* QuizTableViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QuizTableViewController.xib; sourceTree = "<group>"; };
 		F16943392483C29100431BA1 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		F169433B2483C2B100431BA1 /* LoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
-		F169433D2483CBCE00431BA1 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		F169433F2483CC2600431BA1 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		F16F47BF248A45170064B318 /* SingleQuizViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SingleQuizViewController.xib; sourceTree = "<group>"; };
 		F1A587AE24829E5200582D70 /* QuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionView.swift; sourceTree = "<group>"; };
 		F1CE7E5824641ECD002258DE /* QuizApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuizApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1CE7E5B24641ECD002258DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -53,12 +55,31 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				716634BC08FE5AC72D7253F9 /* Pods_QuizApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5B7940AD8FF09F3E3CB5C67A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				088CB2230BB159B51829D1D5 /* Pods-QuizApp.debug.xcconfig */,
+				EE458440D58C8F92EECE1679 /* Pods-QuizApp.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		B9F5C9E05037F6D80C8EB1F4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				81F6BFDA6B6E989340236471 /* Pods_QuizApp.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F1A587AD24829E3F00582D70 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -76,8 +97,7 @@
 				F1CE7E5F24641ECD002258DE /* QuizTableViewController.swift */,
 				F11D315A2484352400D1EC5F /* QuizTableViewController.xib */,
 				F11D31582484343C00D1EC5F /* SingleQuizViewController.swift */,
-				F169433F2483CC2600431BA1 /* MainViewController.swift */,
-				F169433D2483CBCE00431BA1 /* Main.storyboard */,
+				F16F47BF248A45170064B318 /* SingleQuizViewController.xib */,
 				F16943392483C29100431BA1 /* LoginViewController.swift */,
 				F169433B2483C2B100431BA1 /* LoginViewController.xib */,
 			);
@@ -89,6 +109,8 @@
 			children = (
 				F1CE7E5A24641ECD002258DE /* QuizApp */,
 				F1CE7E5924641ECD002258DE /* Products */,
+				5B7940AD8FF09F3E3CB5C67A /* Pods */,
+				B9F5C9E05037F6D80C8EB1F4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -131,9 +153,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F1CE7E6C24641ED0002258DE /* Build configuration list for PBXNativeTarget "QuizApp" */;
 			buildPhases = (
+				F6CF3B37569C6A68B8039C8A /* [CP] Check Pods Manifest.lock */,
 				F1CE7E5424641ECC002258DE /* Sources */,
 				F1CE7E5524641ECC002258DE /* Frameworks */,
 				F1CE7E5624641ECC002258DE /* Resources */,
+				40D232CCA73BE04DD27C5C05 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -183,15 +207,57 @@
 			buildActionMask = 2147483647;
 			files = (
 				F169433C2483C2B100431BA1 /* LoginViewController.xib in Resources */,
-				F169433E2483CBCF00431BA1 /* Main.storyboard in Resources */,
 				F11D315B2484352400D1EC5F /* QuizTableViewController.xib in Resources */,
 				F1CE7E6824641ED0002258DE /* LaunchScreen.storyboard in Resources */,
 				F1CE7E6524641ED0002258DE /* Assets.xcassets in Resources */,
 				F11D315324842EE300D1EC5F /* QuizTableCell.xib in Resources */,
+				F16F47C0248A45170064B318 /* SingleQuizViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		40D232CCA73BE04DD27C5C05 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-QuizApp/Pods-QuizApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-QuizApp/Pods-QuizApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-QuizApp/Pods-QuizApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F6CF3B37569C6A68B8039C8A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-QuizApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F1CE7E5424641ECC002258DE /* Sources */ = {
@@ -205,7 +271,6 @@
 				F169433A2483C29100431BA1 /* LoginViewController.swift in Sources */,
 				F1D755852466B5DB003D7845 /* Types.swift in Sources */,
 				F11D3157248430A300D1EC5F /* QuizTableHeader.swift in Sources */,
-				F16943402483CC2600431BA1 /* MainViewController.swift in Sources */,
 				F11D31592484343C00D1EC5F /* SingleQuizViewController.swift in Sources */,
 				F1D755832466B5BA003D7845 /* ApiClient.swift in Sources */,
 				F11D315524842EFE00D1EC5F /* QuizTableCell.swift in Sources */,
@@ -342,6 +407,7 @@
 		};
 		F1CE7E6D24641ED0002258DE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 088CB2230BB159B51829D1D5 /* Pods-QuizApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -359,6 +425,7 @@
 		};
 		F1CE7E6E24641ED0002258DE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EE458440D58C8F92EECE1679 /* Pods-QuizApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
