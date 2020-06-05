@@ -87,7 +87,7 @@ class LoginViewController : UIViewController, UITextFieldDelegate {
             switch (result) {
             case .success(_):
                 DispatchQueue.main.async {
-                    self.navigationController?.pushViewController(QuizTableViewController(), animated: true)
+                    self.navigationController?.setViewControllers([QuizTableViewController()], animated: true)
                 }
                 break
             case .failure(_):
