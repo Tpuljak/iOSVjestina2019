@@ -52,3 +52,7 @@ func categoryToColor(category: Category) -> UIColor {
         return UIColor.gray
     }
 }
+
+protocol QuestionAnsweredDelegate {
+    func anwsered(_ correct: Bool)
+}

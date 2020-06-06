@@ -9,11 +9,11 @@
 import Foundation
 import UIKit
 
-class SingleQuizViewController : UIViewController {
-    
+class SingleQuizViewController : UIViewController, QuestionAnsweredDelegate {
     @IBOutlet weak var quizTitleLabel: UILabel!
     @IBOutlet weak var quizImageView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var startQuizButton: UIButton!
     
     @IBAction func startQuizAction(_ sender: UIButton) {
         self.scrollView.isHidden = false
@@ -28,6 +28,8 @@ class SingleQuizViewController : UIViewController {
     var quizEndTime = Date()
     var correctAnswers = 0
     
+    var didSetupConstraints = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,16 +41,42 @@ class SingleQuizViewController : UIViewController {
             quizImageView.isHidden = true
         }
         
+        scrollView.autoSetDimensions(to: CGSize(width: view.bounds.size.width * 0.9, height: view.bounds .size.height * 0.4))
+        
         questions.enumerated().forEach{ (index, question) in
-            let qv = QuestionView(frame: CGRect(x: CGFloat(index) * scrollView.bounds.size.width, y: 0, width: scrollView.bounds.size.width, height: scrollView.bounds.size.height))
+            let qv = QuestionView(frame: CGRect(x: CGFloat(index) * scrollView.frame.size.width, y: 0, width: scrollView.frame.size.width, height: scrollView.frame.size.height))
             
-            qv.parentQuizViewController = self
+            qv.questionAnsweredDelegate = self
             qv.setup(question: question)
             
             scrollView.addSubview(qv)
         }
         
         scrollView.contentSize = CGSize(width: CGFloat(questions.count) * scrollView.frame.size.width, height: scrollView.frame.size.height)
+        
+        view.setNeedsUpdateConstraints()
+    }
+    
+    override func updateViewConstraints() {
+        if (!didSetupConstraints) {
+            quizTitleLabel.autoSetDimension(.width, toSize: view.bounds.size.width * 0.8)
+            quizTitleLabel.autoPinEdge(.top, to: .top, of: view, withOffset: 120)
+            quizTitleLabel.autoAlignAxis(.vertical, toSameAxisOf: view)
+            
+            quizImageView.autoSetDimensions(to: CGSize(width: 150, height: 150))
+            quizImageView.autoPinEdge(.top, to: .bottom, of: quizTitleLabel, withOffset: 20)
+            quizImageView.autoAlignAxis(.vertical, toSameAxisOf: view)
+            
+            startQuizButton.autoPinEdge(.top, to: .bottom, of: quizImageView, withOffset: 50)
+            startQuizButton.autoAlignAxis(.vertical, toSameAxisOf: view)
+            
+            scrollView.autoPinEdge(.top, to: .bottom, of: startQuizButton)
+            scrollView.autoAlignAxis(.vertical, toSameAxisOf: view)
+            
+            didSetupConstraints = true
+        }
+        
+        super.updateViewConstraints()
     }
     
     var quizTitle: String {
@@ -63,12 +91,27 @@ class SingleQuizViewController : UIViewController {
         return quiz?.questions ?? []
     }
     
-    func quizEnded() {
+    func gameEnded() {
         quizEndTime = Date()
         
         let result = apiClient.sendQuizResults(quizId: quiz?.id ?? -1, time: DateInterval(start: quizStartTime, end: quizEndTime).duration , nOfCorrect: correctAnswers)
         print(result.statusCode)
         
         navigationController?.popViewController(animated: true)
+    }
+    
+    func anwsered(_ correct: Bool) {
+        if correct {
+            correctAnswers += 1
+        }
+        
+        let newOffset = CGPoint(x: scrollView.contentOffset.x + CGFloat(scrollView.frame.size.width), y: 0)
+        
+        if newOffset.x >= scrollView.contentSize.width - scrollView.frame.size.width {
+            gameEnded()
+            return
+        }
+        
+        scrollView.setContentOffset(newOffset, animated: true)
     }
 }

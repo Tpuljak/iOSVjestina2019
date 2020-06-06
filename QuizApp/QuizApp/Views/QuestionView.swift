@@ -15,6 +15,8 @@ class QuestionView : UIView {
     var buttonStackView: UIStackView!
     var parentQuizViewController: SingleQuizViewController?
     
+    var questionAnsweredDelegate: QuestionAnsweredDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -77,17 +79,10 @@ class QuestionView : UIView {
     @objc func answerButtonAction(sender: UIButton) {
         if sender.tag == 1 {
             sender.backgroundColor = UIColor.green
-            parentQuizViewController?.correctAnswers += 1
         } else {
             sender.backgroundColor = UIColor.red
         }
         
-        let newOffset = CGPoint(x: (parentQuizViewController?.scrollView.contentOffset.x ?? 0) + CGFloat(self.bounds.size.width), y: 0)
-        
-        if (newOffset.x >= parentQuizViewController?.scrollView.contentSize.width ?? 0) {
-            parentQuizViewController?.quizEnded()
-        }
-        
-        parentQuizViewController?.scrollView.setContentOffset(newOffset, animated: true)
+        questionAnsweredDelegate?.anwsered(sender.tag == 1)
     }
 }
