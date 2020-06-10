@@ -38,6 +38,11 @@ struct Quiz: Codable {
     let questions: Array<Question>
 }
 
+struct LeaderboardScore : Codable {
+    let username: String
+    let score: Double?
+}
+
 struct GetQuizzesResponse: Codable {
     let quizzes: Array<Quiz>
 }

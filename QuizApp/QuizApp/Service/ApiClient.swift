@@ -116,4 +116,33 @@ class ApiClient {
         
         return result
     }
+    
+    public func getQuizLeaderboard(quizId: Int) -> Result<[LeaderboardScore]?, NetworkError> {
+        guard let url = URL(string: self.baseUrl + "/score?quiz_id=" + String(quizId)) else {
+            return .failure(.url)
+        }
+        
+        var result: Result<[LeaderboardScore]?, NetworkError>!
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.dataTask(with: url) { data, _, _ in
+            if let data = data {
+                do {
+                    let res = try JSONDecoder().decode([LeaderboardScore].self, from: data)
+                    
+                    result = .success(res)
+                } catch _ {
+                    result = .failure(.server)
+                }
+            } else {
+                result = .failure(.server)
+            }
+            semaphore.signal()
+        }.resume()
+        
+        _ = semaphore.wait(wallTimeout: .distantFuture)
+        
+        return result
+    }
 }

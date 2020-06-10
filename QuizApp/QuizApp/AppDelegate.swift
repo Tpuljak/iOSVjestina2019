@@ -18,16 +18,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = UIColor.white
         
         
-        var viewController: UIViewController
-        
         if UserDefaults.standard.valueExists(forKey: "token") {
-            viewController = QuizTableViewController()
+            let quizTableItem = UITabBarItem()
+            quizTableItem.title = "Quizzes"
+            quizTableItem.image = UIImage(systemName: "list.dash")
+            
+            let quizTableViewController = QuizTableViewController()
+            
+            let settingsItem = UITabBarItem()
+            settingsItem.title = "Settings"
+            settingsItem.image = UIImage(systemName: "gear")
+            
+            let settingsViewController = SettingsViewController()
+            settingsViewController.tabBarItem = settingsItem
+            
+            let searchItem = UITabBarItem()
+            searchItem.title = "Search"
+            searchItem.image = UIImage(systemName: "magnifyingglass")
+            
+            let searchViewController = SearchViewController()
+            searchViewController.tabBarItem = searchItem
+            
+            let quizTableNavigationController = UINavigationController(rootViewController: quizTableViewController)
+            quizTableNavigationController.tabBarItem = quizTableItem
+            
+            let rootViewController = UITabBarController()
+            rootViewController.viewControllers = [quizTableNavigationController, settingsViewController, searchViewController]
+            
+            window?.rootViewController = rootViewController
         } else {
-            viewController = LoginViewController()
+            let viewController = LoginViewController()
+            
+            let rootViewController = UINavigationController(rootViewController: viewController)
+            
+            window?.rootViewController = rootViewController
         }
         
-        let navigationController = UINavigationController(rootViewController: viewController)
-        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         
         return true

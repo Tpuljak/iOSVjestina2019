@@ -12,6 +12,7 @@
                 <outlet property="quizImageView" destination="Fip-Hp-7fQ" id="iEe-cQ-QkI"/>
                 <outlet property="quizTitleLabel" destination="DIu-3u-lc1" id="F1t-XM-mJg"/>
                 <outlet property="scrollView" destination="QqD-SE-hfY" id="oZ3-JS-3UX"/>
+                <outlet property="showLeaderBoardButton" destination="US2-dd-p9q" id="Ywr-pc-DBZ"/>
                 <outlet property="startQuizButton" destination="b5G-vK-Wqn" id="E6v-PH-gBK"/>
                 <outlet property="view" destination="iN0-l3-epB" id="S7m-TY-ugY"/>
             </connections>
@@ -25,17 +26,8 @@
                     <rect key="frame" x="132" y="146" width="150" height="150"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b5G-vK-Wqn">
-                    <rect key="frame" x="137" y="332" width="141" height="36"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <state key="normal" title="Start quiz"/>
-                    <connections>
-                        <action selector="startQuizAction:" destination="-1" eventType="touchUpInside" id="CCg-zU-rcK"/>
-                    </connections>
-                </button>
                 <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QqD-SE-hfY">
-                    <rect key="frame" x="20" y="384" width="374" height="478"/>
+                    <rect key="frame" x="20" y="429" width="374" height="433"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <viewLayoutGuide key="contentLayoutGuide" id="G2Y-dn-zqC"/>
                     <viewLayoutGuide key="frameLayoutGuide" id="XuR-4n-GjG"/>
@@ -47,6 +39,21 @@
                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="US2-dd-p9q">
+                    <rect key="frame" x="130" y="329" width="158" height="36"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <state key="normal" title="Show leaderboard"/>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b5G-vK-Wqn">
+                    <rect key="frame" x="137" y="368" width="141" height="36"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <state key="normal" title="Start quiz"/>
+                    <connections>
+                        <action selector="startQuizAction:" destination="-1" eventType="touchUpInside" id="CCg-zU-rcK"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
