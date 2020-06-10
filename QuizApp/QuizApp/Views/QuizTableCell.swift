@@ -67,23 +67,17 @@ class QuizTableCell : UITableViewCell {
         titleLabel.text = quiz.title
         descriptionLabel.text = quiz.description
         
-        if (quiz.image.absoluteString == "") {
+        if quiz.image.absoluteString == "" {
             quizImageView.isHidden = true
         } else {
             quizImageView.load(url: quiz.image)
             quizImageView.backgroundColor = categoryToColor(category: quiz.category)
         }
+                
+        difficultyIcon1.isHidden = !(quiz.level > 0)
         
-        if quiz.level > 0 {
-            difficultyIcon1.isHidden = false
-        }
+        difficultyIcon2.isHidden = !(quiz.level > 1)
         
-        if quiz.level > 1 {
-            difficultyIcon2.isHidden = false
-        }
-        
-        if quiz.level > 2 {
-            difficultyIcon3.isHidden = false
-        }
+        difficultyIcon3.isHidden = !(quiz.level > 2)
     }
 }
