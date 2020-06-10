@@ -11,7 +11,17 @@ import UIKit
 
 class SettingsViewController : UIViewController {
     
+    
+    @IBOutlet weak var usernameLabel: UILabel!
+    @IBAction func logoutAction(_ sender: Any) {
+        UserDefaults.standard.reset()
+        
+        let appDelegate = UIApplication.shared.delegate
+        appDelegate?.window??.rootViewController = LoginViewController()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        usernameLabel.text = UserDefaults.standard.string(forKey: "username")
     }
 }

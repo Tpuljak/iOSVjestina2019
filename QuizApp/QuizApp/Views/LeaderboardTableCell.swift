@@ -29,10 +29,10 @@ class LeaderboardTableCell : UITableViewCell {
         scoreTextLabel.autoPinEdge(.leading, to: .leading, of: self, withOffset: 20)
         scoreTextLabel.autoPinEdge(.top, to: .bottom, of: usernameTextLabel, withOffset: 20)
         
-        usernameOutputLabel.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: 20)
+        usernameOutputLabel.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -20)
         usernameOutputLabel.autoPinEdge(.top, to: .top, of: self, withOffset: 20)
         
-        scoreOutputLabel.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: 20)
+        scoreOutputLabel.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -20)
         scoreOutputLabel.autoPinEdge(.top, to: .bottom, of: usernameOutputLabel, withOffset: 20)
     }
     
@@ -44,6 +44,8 @@ class LeaderboardTableCell : UITableViewCell {
     
     func setup(withLeaderboardScore score: LeaderboardScore) {
         usernameOutputLabel.text = score.username
-        scoreOutputLabel.text = String(score.score ?? 0)
+        
+        let scoreString = String(format: "%.2lf", score.score ?? 0)
+        scoreOutputLabel.text = scoreString
     }
 }

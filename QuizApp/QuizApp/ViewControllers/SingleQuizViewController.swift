@@ -99,7 +99,10 @@ class SingleQuizViewController : UIViewController, QuestionAnsweredDelegate {
     }
     
     @objc func showLeaderboardAction(_ sender: UIButton) {
+        let leaderboardTableViewController = LeaderboardTableViewController()
+        leaderboardTableViewController.quizId = quiz?.id
         
+        self.navigationController?.pushViewController(leaderboardTableViewController, animated: true)
     }
     
     func gameEnded() {

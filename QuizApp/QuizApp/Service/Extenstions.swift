@@ -65,4 +65,47 @@ extension UserDefaults {
         return object(forKey: key) != nil
     }
 
+    enum Keys: String, CaseIterable {
+
+        case unitsNotation
+        case temperatureNotation
+        case allowDownloadsOverCellular
+
+    }
+
+    func reset() {
+        Keys.allCases.forEach { removeObject(forKey: $0.rawValue) }
+    }
+}
+
+extension UIApplicationDelegate {
+    func setQuizzesRootController() {
+        let quizTableItem = UITabBarItem()
+        quizTableItem.title = "Quizzes"
+        quizTableItem.image = UIImage(systemName: "list.dash")
+        
+        let quizTableViewController = QuizTableViewController()
+        
+        let settingsItem = UITabBarItem()
+        settingsItem.title = "Settings"
+        settingsItem.image = UIImage(systemName: "gear")
+        
+        let settingsViewController = SettingsViewController()
+        settingsViewController.tabBarItem = settingsItem
+        
+        let searchItem = UITabBarItem()
+        searchItem.title = "Search"
+        searchItem.image = UIImage(systemName: "magnifyingglass")
+        
+        let searchViewController = SearchViewController()
+        searchViewController.tabBarItem = searchItem
+        
+        let quizTableNavigationController = UINavigationController(rootViewController: quizTableViewController)
+        quizTableNavigationController.tabBarItem = quizTableItem
+        
+        let rootViewController = UITabBarController()
+        rootViewController.viewControllers = [quizTableNavigationController, settingsViewController, searchViewController]
+        
+        self.window??.rootViewController = rootViewController
+    }
 }

@@ -70,6 +70,8 @@ class ApiClient {
                     
                     UserDefaults.standard.set(res.token, forKey: "token")
                     UserDefaults.standard.set(res.user_id, forKey: "userId")
+                    UserDefaults.standard.set(username, forKey: "username")
+                    
                     result = .success(res)
                 } catch _ {
                     result = .failure(.server)
@@ -126,15 +128,20 @@ class ApiClient {
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        URLSession.shared.dataTask(with: url) { data, _, _ in
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(UserDefaults.standard.string(forKey: "token"), forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTask(with: request) { data, response, _ in
             if let data = data {
-                do {
-                    let res = try JSONDecoder().decode([LeaderboardScore].self, from: data)
-                    
-                    result = .success(res)
-                } catch _ {
+                guard let res = try? JSONDecoder().decode([LeaderboardScore].self, from: data) else {
                     result = .failure(.server)
+                    semaphore.signal()
+                    return
                 }
+                    
+                result = .success(res)
             } else {
                 result = .failure(.server)
             }

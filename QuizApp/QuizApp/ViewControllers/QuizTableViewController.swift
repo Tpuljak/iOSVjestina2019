@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class QuizTableViewController: UIViewController {
     
@@ -29,6 +30,7 @@ class QuizTableViewController: UIViewController {
             self.navigationController?.pushViewController(LoginViewController(), animated: true)
         }
         
+        getLocalData()
         setupQuizTableView()
         getData()
     }
@@ -42,9 +44,38 @@ class QuizTableViewController: UIViewController {
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(QuizTableViewController.refresh), for: UIControl.Event.valueChanged)
         quizTableView.refreshControl = refreshControl
-
+        
         quizTableView.register(UINib(nibName: "QuizTableCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
         quizTableView.delegate = self
+    }
+    
+    func getLocalData() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        
+        let context = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Quizzes")
+        request.returnsObjectsAsFaults = false
+        
+        quizzes = []
+        do {
+            let results = try context.fetch(request)
+            if !results.isEmpty {
+                for result in results as! [NSManagedObject] {
+                    guard let id = result.value(forKey: "id") as? Int else { return }
+                    guard let title = result.value(forKey: "title") as? String else { return }
+                    guard let description = result.value(forKey: "description") as? String else { return }
+                    guard let category = result.value(forKey: "title") as? Category else { return }
+                    guard let level = result.value(forKey: "title") as? Int else { return }
+                    guard let image = result.value(forKey: "title") as? URL else { return }
+                    guard let questions = result.value(forKey: "title") as? [Question] else { return }
+                    
+                    let quiz = Quiz(id: id, title: title, description: description, category: category, level: level, image: image, questions: questions)
+                    quizzes?.append(quiz)
+                }
+            }
+        } catch {
+            print("Error retrieving: \(error)")
+        }
     }
     
     func getData() {
