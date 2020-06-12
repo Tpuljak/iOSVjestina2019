@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 enum NetworkError: Error {
     case url, server
@@ -67,7 +68,7 @@ final class LeaderboardScore : Codable {
 }
 
 struct GetQuizzesResponse: Codable {
-    let quizzes: Array<Quiz>
+    var quizzes: [Quiz]
 }
 
 func categoryToColor(category: Category) -> UIColor {

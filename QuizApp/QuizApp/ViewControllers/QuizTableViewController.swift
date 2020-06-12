@@ -30,8 +30,8 @@ class QuizTableViewController: UIViewController {
             self.navigationController?.pushViewController(LoginViewController(), animated: true)
         }
         
-        getLocalData()
         setupQuizTableView()
+        getLocalData()
         getData()
     }
     
@@ -53,25 +53,25 @@ class QuizTableViewController: UIViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         
         let context = appDelegate.persistentContainer.viewContext
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Quizzes")
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "QuizzesCoreData")
         request.returnsObjectsAsFaults = false
         
-        quizzes = []
         do {
             let results = try context.fetch(request)
             if !results.isEmpty {
                 for result in results as! [NSManagedObject] {
-                    guard let id = result.value(forKey: "id") as? Int else { return }
-                    guard let title = result.value(forKey: "title") as? String else { return }
-                    guard let description = result.value(forKey: "description") as? String else { return }
-                    guard let category = result.value(forKey: "title") as? Category else { return }
-                    guard let level = result.value(forKey: "title") as? Int else { return }
-                    guard let image = result.value(forKey: "title") as? URL else { return }
-                    guard let questions = result.value(forKey: "title") as? [Question] else { return }
+                    guard let quizzesString = result.value(forKey: "quizzes") as? String else { return }
+                    guard let quizJsonData = quizzesString.data(using: .utf8) else { return}
                     
-                    let quiz = Quiz(id: id, title: title, description: description, category: category, level: level, image: image, questions: questions)
-                    quizzes?.append(quiz)
+                    self.quizzes = try JSONDecoder().decode([Quiz].self, from: quizJsonData)
+                    self.quizSections = Dictionary(grouping: self.quizzes ?? [], by: { $0.category })
+                    
+                    if self.quizSections != nil {
+                        self.categories = Array(self.quizSections!.keys)
+                    }
                 }
+                
+                self.refresh()
             }
         } catch {
             print("Error retrieving: \(error)")
@@ -95,15 +95,36 @@ class QuizTableViewController: UIViewController {
                     self.categories = Array(self.quizSections!.keys)
                 }
                 
-                self.refresh()
-                break
-            case let .failure(error):
                 DispatchQueue.main.async {
-                    self.quizTableView.isHidden = true
-                    self.dataFailed.isHidden = false
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    
+                    let context = appDelegate.persistentContainer.viewContext
+                    let quizModels = NSEntityDescription.insertNewObject(forEntityName: "QuizzesCoreData", into: context)
+                    
+                    let jsonData = try! JSONEncoder().encode(self.quizzes)
+                    quizModels.setValue(String(data: jsonData, encoding: .utf8), forKey: "quizzes")
+                    
+                    do {
+                        try context.save()
+                    } catch {
+                        fatalError("Error saving context")
+                    }
+                    
+                    self.refresh()
                 }
                 
-                print(error)
+                
+                break
+            case let .failure(error):
+                if self.quizzes?.isEmpty ?? true {
+                    DispatchQueue.main.async {
+                        self.quizTableView.isHidden = true
+                        self.dataFailed.isHidden = false
+                    }
+                    
+                    print(error)
+                }
+                
                 break
             }
         }
@@ -125,7 +146,7 @@ class QuizTableViewController: UIViewController {
     }
     
     func quiz(atIndex index: Int, atSection: Int) -> Quiz? {
-        guard let quizzes = quizzes else {
+        guard quizzes != nil else {
             return nil
         }
         
