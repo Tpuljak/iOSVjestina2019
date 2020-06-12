@@ -49,6 +49,10 @@ class QuestionView : UIView {
         self.buttonStackView.autoAlignAxis(.vertical, toSameAxisOf: self)
         self.buttonStackView.autoSetDimensions(to: CGSize(width: self.bounds.size.width * 0.8, height: self.bounds.size.height * 0.7))
         
+        self.setupAnswers(question: question)
+    }
+    
+    func setupAnswers(question: Question) {
         var previous: UIButton?
         question.answers.enumerated().forEach{ index, answer in
             let answerButton = UIButton()
@@ -63,7 +67,6 @@ class QuestionView : UIView {
             answerButton.centerXAnchor.constraint(equalTo: self.buttonStackView.centerXAnchor).isActive = true
             answerButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
             answerButton.widthAnchor.constraint(equalTo: self.buttonStackView.widthAnchor).isActive = true
-            
             if let previous = previous {
                 answerButton.autoPinEdge(.top, to: .bottom, of: previous, withOffset: 10)
             } else {
