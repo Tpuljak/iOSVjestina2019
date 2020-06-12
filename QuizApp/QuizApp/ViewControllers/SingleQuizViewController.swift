@@ -108,8 +108,7 @@ class SingleQuizViewController : UIViewController, QuestionAnsweredDelegate {
     func gameEnded() {
         quizEndTime = Date()
         
-        let result = apiClient.sendQuizResults(quizId: quiz?.id ?? -1, time: DateInterval(start: quizStartTime, end: quizEndTime).duration , nOfCorrect: correctAnswers)
-        print(result.statusCode)
+        let _ = apiClient.sendQuizResults(quizId: quiz?.id ?? -1, time: DateInterval(start: quizStartTime, end: quizEndTime).duration , nOfCorrect: correctAnswers)
         
         navigationController?.popViewController(animated: true)
     }

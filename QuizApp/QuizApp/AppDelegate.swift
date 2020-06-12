@@ -19,11 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = UIColor.white
         
         
-//        if UserDefaults.standard.valueExists(forKey: "token") {
-//            self.setQuizzesRootController()
-//        } else {
+        if UserDefaults.standard.valueExists(forKey: "token") {
+            self.setQuizzesRootController()
+        } else {
             self.setLoginRootController()
-//        }
+        }
         
         window?.makeKeyAndVisible()
         
