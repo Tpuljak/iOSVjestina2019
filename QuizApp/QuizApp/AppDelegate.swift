@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if UserDefaults.standard.valueExists(forKey: "token") {
             self.setQuizzesRootController()
         } else {
-            window?.rootViewController = LoginViewController()
+            self.setLoginRootController()
         }
         
         window?.makeKeyAndVisible()

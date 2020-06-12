@@ -28,7 +28,10 @@ class QuizTableViewController: UIViewController, ReachabilityObserverDelegate {
         super.viewDidLoad()
         
         if (!UserDefaults.standard.valueExists(forKey: "token")) {
-            self.navigationController?.pushViewController(LoginViewController(), animated: true)
+            DispatchQueue.main.async {
+                let appDelegate = UIApplication.shared.delegate
+                appDelegate?.setLoginRootController()
+            }
         }
         
         setupQuizTableView()
@@ -73,11 +76,7 @@ class QuizTableViewController: UIViewController, ReachabilityObserverDelegate {
                     guard let quizJsonData = quizzesString.data(using: .utf8) else { return}
                     
                     self.quizzes = try JSONDecoder().decode([Quiz].self, from: quizJsonData)
-                    self.quizSections = Dictionary(grouping: self.quizzes ?? [], by: { $0.category })
-                    
-                    if self.quizSections != nil {
-                        self.categories = Array(self.quizSections!.keys)
-                    }
+                    self.updateSections()
                 }
                 
                 self.refresh()
@@ -98,11 +97,7 @@ class QuizTableViewController: UIViewController, ReachabilityObserverDelegate {
                 }
                 
                 self.quizzes = data.flatMap{ $0.quizzes }!
-                self.quizSections = Dictionary(grouping: self.quizzes ?? [], by: { $0.category })
-                
-                if self.quizSections != nil {
-                    self.categories = Array(self.quizSections!.keys)
-                }
+                self.updateSections()
                 
                 DispatchQueue.main.async {
                     let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -135,6 +130,14 @@ class QuizTableViewController: UIViewController, ReachabilityObserverDelegate {
                 
                 break
             }
+        }
+    }
+    
+    func updateSections() {
+        self.quizSections = Dictionary(grouping: self.quizzes ?? [], by: { $0.category })
+        
+        if self.quizSections != nil {
+            self.categories = Array(self.quizSections!.keys)
         }
     }
     

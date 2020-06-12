@@ -16,9 +16,12 @@ class SettingsViewController : UIViewController {
     @IBAction func logoutAction(_ sender: Any) {
         UserDefaults.standard.reset()
         
-        let appDelegate = UIApplication.shared.delegate
-        appDelegate?.window??.rootViewController = LoginViewController()
+        DispatchQueue.main.async {
+            let appDelegate = UIApplication.shared.delegate
+            appDelegate?.setLoginRootController()
+        }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

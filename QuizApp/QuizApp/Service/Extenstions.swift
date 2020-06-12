@@ -86,6 +86,9 @@ extension UIApplicationDelegate {
         
         let quizTableViewController = QuizTableViewController()
         
+        let quizTableNavigationController = UINavigationController(rootViewController: quizTableViewController)
+        quizTableNavigationController.tabBarItem = quizTableItem
+        
         let settingsItem = UITabBarItem()
         settingsItem.title = "Settings"
         settingsItem.image = UIImage(systemName: "gear")
@@ -98,14 +101,17 @@ extension UIApplicationDelegate {
         searchItem.image = UIImage(systemName: "magnifyingglass")
         
         let searchViewController = SearchViewController()
-        searchViewController.tabBarItem = searchItem
         
-        let quizTableNavigationController = UINavigationController(rootViewController: quizTableViewController)
-        quizTableNavigationController.tabBarItem = quizTableItem
+        let searchViewNaviationController = UINavigationController(rootViewController: searchViewController)
+        searchViewNaviationController.tabBarItem = searchItem
         
         let rootViewController = UITabBarController()
-        rootViewController.viewControllers = [quizTableNavigationController, settingsViewController, searchViewController]
+        rootViewController.viewControllers = [quizTableNavigationController, settingsViewController, searchViewNaviationController]
         
         self.window??.rootViewController = rootViewController
+    }
+    
+    func setLoginRootController() {
+        self.window??.rootViewController = LoginViewController()
     }
 }
