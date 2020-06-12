@@ -39,7 +39,7 @@ class ApiClient {
             semaphore.signal()
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        _ = semaphore.wait(wallTimeout: .now() + 10)
         
         return result
     }
@@ -82,7 +82,7 @@ class ApiClient {
             semaphore.signal()
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        _ = semaphore.wait(wallTimeout: .now() + 10)
         
         return result
     }
@@ -114,7 +114,7 @@ class ApiClient {
             semaphore.signal()
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        _ = semaphore.wait(wallTimeout: .now() + 10)
         
         return result
     }
@@ -148,7 +148,7 @@ class ApiClient {
             semaphore.signal()
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        _ = semaphore.wait(wallTimeout: .now() + 10)
         
         return result
     }
