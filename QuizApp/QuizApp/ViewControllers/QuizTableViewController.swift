@@ -8,8 +8,9 @@
 
 import UIKit
 import CoreData
+import Reachability
 
-class QuizTableViewController: UIViewController {
+class QuizTableViewController: UIViewController, ReachabilityObserverDelegate {
     
     @IBOutlet weak var quizTableView: UITableView!
     @IBOutlet weak var dataFailed: UILabel!
@@ -31,8 +32,16 @@ class QuizTableViewController: UIViewController {
         }
         
         setupQuizTableView()
-        getLocalData()
-        getData()
+        
+        try? addReachabilityObserver()
+    }
+    
+    func reachabilityChanged(_ isReachable: Bool) {
+        if !isReachable {
+            getLocalData()
+        } else {
+            getData()
+        }
     }
     
     func setupQuizTableView() {
@@ -112,7 +121,6 @@ class QuizTableViewController: UIViewController {
                     
                     self.refresh()
                 }
-                
                 
                 break
             case let .failure(error):

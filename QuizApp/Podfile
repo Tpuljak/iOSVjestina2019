@@ -7,4 +7,5 @@ target 'QuizApp' do
 
   # Pods for QuizApp
   pod 'PureLayout'
+  pod 'ReachabilitySwift'
 end
