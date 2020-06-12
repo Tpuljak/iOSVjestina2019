@@ -65,4 +65,53 @@ extension UserDefaults {
         return object(forKey: key) != nil
     }
 
+    enum Keys: String, CaseIterable {
+
+        case unitsNotation
+        case temperatureNotation
+        case allowDownloadsOverCellular
+
+    }
+
+    func reset() {
+        Keys.allCases.forEach { removeObject(forKey: $0.rawValue) }
+    }
+}
+
+extension UIApplicationDelegate {
+    func setQuizzesRootController() {
+        let quizTableItem = UITabBarItem()
+        quizTableItem.title = "Quizzes"
+        quizTableItem.image = UIImage(systemName: "list.dash")
+        
+        let quizTableViewController = QuizTableViewController()
+        
+        let quizTableNavigationController = UINavigationController(rootViewController: quizTableViewController)
+        quizTableNavigationController.tabBarItem = quizTableItem
+        
+        let settingsItem = UITabBarItem()
+        settingsItem.title = "Settings"
+        settingsItem.image = UIImage(systemName: "gear")
+        
+        let settingsViewController = SettingsViewController()
+        settingsViewController.tabBarItem = settingsItem
+        
+        let searchItem = UITabBarItem()
+        searchItem.title = "Search"
+        searchItem.image = UIImage(systemName: "magnifyingglass")
+        
+        let searchViewController = SearchViewController()
+        
+        let searchViewNaviationController = UINavigationController(rootViewController: searchViewController)
+        searchViewNaviationController.tabBarItem = searchItem
+        
+        let rootViewController = UITabBarController()
+        rootViewController.viewControllers = [quizTableNavigationController, settingsViewController, searchViewNaviationController]
+        
+        self.window??.rootViewController = rootViewController
+    }
+    
+    func setLoginRootController() {
+        self.window??.rootViewController = LoginViewController()
+    }
 }

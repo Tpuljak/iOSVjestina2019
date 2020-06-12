@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 enum NetworkError: Error {
     case url, server
@@ -35,11 +36,39 @@ struct Quiz: Codable {
     let category: Category
     let level: Int
     let image: URL
-    let questions: Array<Question>
+    let questions: [Question]
+    
+    init(id: Int, title: String, description: String, category: Category, level: Int, image: URL, questions: [Question]) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.category = category
+        self.level = level
+        self.image = image
+        self.questions = questions
+    }
+}
+
+final class LeaderboardScore : Codable {
+    let username: String
+    let score: Double?
+    
+    init(from decoder: Decoder) throws {
+        let map = try decoder.container(keyedBy: CodingKeys.self)
+        self.username = try map.decode(String.self, forKey: .username)
+        
+        let scoreString = try map.decode(String?.self, forKey: .score)
+        self.score = Double(scoreString ?? "0")
+    }
+    
+    private enum CodingKeys: CodingKey {
+        case username
+        case score
+    }
 }
 
 struct GetQuizzesResponse: Codable {
-    let quizzes: Array<Quiz>
+    var quizzes: [Quiz]
 }
 
 func categoryToColor(category: Category) -> UIColor {

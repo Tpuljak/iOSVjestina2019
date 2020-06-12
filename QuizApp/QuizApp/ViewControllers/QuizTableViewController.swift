@@ -7,8 +7,10 @@
 //
 
 import UIKit
+import CoreData
+import Reachability
 
-class QuizTableViewController: UIViewController {
+class QuizTableViewController: UIViewController, ReachabilityObserverDelegate {
     
     @IBOutlet weak var quizTableView: UITableView!
     @IBOutlet weak var dataFailed: UILabel!
@@ -26,11 +28,23 @@ class QuizTableViewController: UIViewController {
         super.viewDidLoad()
         
         if (!UserDefaults.standard.valueExists(forKey: "token")) {
-            self.navigationController?.pushViewController(LoginViewController(), animated: true)
+            DispatchQueue.main.async {
+                let appDelegate = UIApplication.shared.delegate
+                appDelegate?.setLoginRootController()
+            }
         }
         
         setupQuizTableView()
-        getData()
+        
+        try? addReachabilityObserver()
+    }
+    
+    func reachabilityChanged(_ isReachable: Bool) {
+        if !isReachable {
+            getLocalData()
+        } else {
+            getData()
+        }
     }
     
     func setupQuizTableView() {
@@ -42,9 +56,34 @@ class QuizTableViewController: UIViewController {
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(QuizTableViewController.refresh), for: UIControl.Event.valueChanged)
         quizTableView.refreshControl = refreshControl
-
+        
         quizTableView.register(UINib(nibName: "QuizTableCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
         quizTableView.delegate = self
+    }
+    
+    func getLocalData() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        
+        let context = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "QuizzesCoreData")
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            let results = try context.fetch(request)
+            if !results.isEmpty {
+                for result in results as! [NSManagedObject] {
+                    guard let quizzesString = result.value(forKey: "quizzes") as? String else { return }
+                    guard let quizJsonData = quizzesString.data(using: .utf8) else { return}
+                    
+                    self.quizzes = try JSONDecoder().decode([Quiz].self, from: quizJsonData)
+                    self.updateSections()
+                }
+                
+                self.refresh()
+            }
+        } catch {
+            print("Error retrieving: \(error)")
+        }
     }
     
     func getData() {
@@ -58,23 +97,47 @@ class QuizTableViewController: UIViewController {
                 }
                 
                 self.quizzes = data.flatMap{ $0.quizzes }!
-                self.quizSections = Dictionary(grouping: self.quizzes ?? [], by: { $0.category })
+                self.updateSections()
                 
-                if self.quizSections != nil {
-                    self.categories = Array(self.quizSections!.keys)
+                DispatchQueue.main.async {
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    
+                    let context = appDelegate.persistentContainer.viewContext
+                    let quizModels = NSEntityDescription.insertNewObject(forEntityName: "QuizzesCoreData", into: context)
+                    
+                    let jsonData = try! JSONEncoder().encode(self.quizzes)
+                    quizModels.setValue(String(data: jsonData, encoding: .utf8), forKey: "quizzes")
+                    
+                    do {
+                        try context.save()
+                    } catch {
+                        fatalError("Error saving context")
+                    }
+                    
+                    self.refresh()
                 }
                 
-                self.refresh()
                 break
             case let .failure(error):
-                DispatchQueue.main.async {
-                    self.quizTableView.isHidden = true
-                    self.dataFailed.isHidden = false
+                if self.quizzes?.isEmpty ?? true {
+                    DispatchQueue.main.async {
+                        self.quizTableView.isHidden = true
+                        self.dataFailed.isHidden = false
+                    }
+                    
+                    print(error)
                 }
                 
-                print(error)
                 break
             }
+        }
+    }
+    
+    func updateSections() {
+        self.quizSections = Dictionary(grouping: self.quizzes ?? [], by: { $0.category })
+        
+        if self.quizSections != nil {
+            self.categories = Array(self.quizSections!.keys)
         }
     }
     
@@ -94,7 +157,7 @@ class QuizTableViewController: UIViewController {
     }
     
     func quiz(atIndex index: Int, atSection: Int) -> Quiz? {
-        guard let quizzes = quizzes else {
+        guard quizzes != nil else {
             return nil
         }
         

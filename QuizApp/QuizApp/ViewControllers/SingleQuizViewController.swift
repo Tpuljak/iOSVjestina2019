@@ -14,11 +14,13 @@ class SingleQuizViewController : UIViewController, QuestionAnsweredDelegate {
     @IBOutlet weak var quizImageView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var startQuizButton: UIButton!
+    @IBOutlet weak var showLeaderBoardButton: UIButton!
     
     @IBAction func startQuizAction(_ sender: UIButton) {
         self.scrollView.isHidden = false
         self.quizStartTime = Date()
         sender.isEnabled = false
+        self.showLeaderBoardButton.isEnabled = false
     }
     
     private var apiClient = ApiClient(baseUrl: "https://iosquiz.herokuapp.com/api")
@@ -54,6 +56,8 @@ class SingleQuizViewController : UIViewController, QuestionAnsweredDelegate {
         
         scrollView.contentSize = CGSize(width: CGFloat(questions.count) * scrollView.frame.size.width, height: scrollView.frame.size.height)
         
+        showLeaderBoardButton.addTarget(self, action: #selector(self.showLeaderboardAction), for: UIControl.Event.touchUpInside)
+        
         view.setNeedsUpdateConstraints()
     }
     
@@ -67,10 +71,13 @@ class SingleQuizViewController : UIViewController, QuestionAnsweredDelegate {
             quizImageView.autoPinEdge(.top, to: .bottom, of: quizTitleLabel, withOffset: 20)
             quizImageView.autoAlignAxis(.vertical, toSameAxisOf: view)
             
-            startQuizButton.autoPinEdge(.top, to: .bottom, of: quizImageView, withOffset: 50)
+            showLeaderBoardButton.autoPinEdge(.top, to: .bottom, of: quizImageView, withOffset: 20)
+            showLeaderBoardButton.autoAlignAxis(.vertical, toSameAxisOf: view)
+            
+            startQuizButton.autoPinEdge(.top, to: .bottom, of: showLeaderBoardButton, withOffset: 20)
             startQuizButton.autoAlignAxis(.vertical, toSameAxisOf: view)
             
-            scrollView.autoPinEdge(.top, to: .bottom, of: startQuizButton)
+            scrollView.autoPinEdge(.top, to: .bottom, of: startQuizButton, withOffset: 20)
             scrollView.autoAlignAxis(.vertical, toSameAxisOf: view)
             
             didSetupConstraints = true
@@ -89,6 +96,13 @@ class SingleQuizViewController : UIViewController, QuestionAnsweredDelegate {
     
     var questions: [Question] {
         return quiz?.questions ?? []
+    }
+    
+    @objc func showLeaderboardAction(_ sender: UIButton) {
+        let leaderboardTableViewController = LeaderboardTableViewController()
+        leaderboardTableViewController.quizId = quiz?.id
+        
+        self.navigationController?.pushViewController(leaderboardTableViewController, animated: true)
     }
     
     func gameEnded() {

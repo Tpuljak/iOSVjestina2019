@@ -70,6 +70,8 @@ class ApiClient {
                     
                     UserDefaults.standard.set(res.token, forKey: "token")
                     UserDefaults.standard.set(res.user_id, forKey: "userId")
+                    UserDefaults.standard.set(username, forKey: "username")
+                    
                     result = .success(res)
                 } catch _ {
                     result = .failure(.server)
@@ -109,6 +111,40 @@ class ApiClient {
         URLSession.shared.dataTask(with: request) { data, response, _ in
             result = response as? HTTPURLResponse
             
+            semaphore.signal()
+        }.resume()
+        
+        _ = semaphore.wait(wallTimeout: .distantFuture)
+        
+        return result
+    }
+    
+    public func getQuizLeaderboard(quizId: Int) -> Result<[LeaderboardScore]?, NetworkError> {
+        guard let url = URL(string: self.baseUrl + "/score?quiz_id=" + String(quizId)) else {
+            return .failure(.url)
+        }
+        
+        var result: Result<[LeaderboardScore]?, NetworkError>!
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(UserDefaults.standard.string(forKey: "token"), forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTask(with: request) { data, response, _ in
+            if let data = data {
+                guard let res = try? JSONDecoder().decode([LeaderboardScore].self, from: data) else {
+                    result = .failure(.server)
+                    semaphore.signal()
+                    return
+                }
+                    
+                result = .success(res)
+            } else {
+                result = .failure(.server)
+            }
             semaphore.signal()
         }.resume()
         

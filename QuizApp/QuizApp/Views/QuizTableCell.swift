@@ -21,6 +21,11 @@ class QuizTableCell : UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        setupConstraints()
+    }
+    
+    func setupConstraints() {
         titleLabel.font = UIFont.systemFont(ofSize: 18)
         titleLabel.textColor = UIColor.brown
         descriptionLabel.font = UIFont.systemFont(ofSize: 16)
